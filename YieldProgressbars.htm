@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Yield Progressbars</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+	<style>
+		body
+		{
+			font-family: Verdana;
+		}
+		.progressbar-container
+		{
+			padding: 20px;
+		}
+		.ui-progressbar
+		{
+			position: relative;
+			width: 70%;
+			float: left;
+		}
+		.progress-label
+		{
+			position: absolute;
+			right: 45%;
+			top: 4px;
+			font-weight: bold;
+			text-shadow: 1px 1px 0 #fff;
+		}
+		.offset
+		{
+			margin-left: 300px;
+		}
+		.product-label
+		{
+			float: left;
+			width: 160px;
+			margin: 10px 20px 0px 0px;
+			text-align: right;
+		}
+		.progressbar-container
+		{
+			margin: 10px;
+		}
+		.info-label
+		{
+			float: left;
+			width: 60px;
+			margin: 10px 20px 0px 0px;
+		}
+		#update-label
+		{
+			margin-top: 40px;
+		}
+		.ui-progressbar
+		{
+			background: #ef6d6d;
+			border: solid 1px black;
+			height: 36px;
+		}
+		.ui-progressbar-value
+		{
+			height: 10px;
+			background: #8cef6d;
+			border: solid 1px black;
+		}
+	</style>
+
+	<script type="text/javascript">
+    	var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+	
+		function dataCall() {     
+		
+		// if(getUrlParameter('from') != undefined && getUrlParameter('to') != undefined){ 
+		    var params = "{ from : \"" + getUrlParameter('from') + "\", to : \"" + getUrlParameter('to') + "\"}";
+		    //}
+			$.ajax({
+				url: 'CheckPointYield.aspx/GetYieldData',
+				type: 'POST',
+				cache: false,
+				dataType: 'json',
+				data: params,
+				contentType: 'application/json; charset=utf-8',
+				success: function (response) {
+					renderData(response.d);
+				}});
+		}
+
+		/*
+			Object { sn="0",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="1",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="2",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="3",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="4",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="5",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="6",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="7",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="8",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="9",  date="Tue Sep 20 2016 18:08:23.... Europe Standard Time)",  pass="0"}
+			Object { sn="620",  date="2000-01-01 00:00:00",  pass="0"}
+			Object { sn="558",  date="2000-01-01 00:00:00",  pass="0"}
+			Object { sn="559",  date="2015-03-03 12:23:01",  pass="1"}
+			Object { sn="621",  date="2015-03-03 12:39:26",  pass="1"}
+			Object { sn="559",  date="2015-03-03 12:45:25",  pass="1"}
+			Object { sn="621",  date="2015-03-03 12:50:38",  pass="1"}
+			Object { sn="621",  date="2015-03-03 12:57:03",  pass="1"}
+			Object { sn="621",  date="2015-03-03 13:11:30",  pass="1"}
+			Object { sn="621",  date="2015-03-03 13:22:21",  pass="0"}
+			Object { sn="559",  date="2015-03-03 13:29:05",  pass="0"}
+			Object { sn="559",  date="2015-03-03 13:36:02",  pass="0"}
+			Object { sn="621",  date="2015-03-03 13:44:36",  pass="1"}
+		*/
+
+		function rawDataCall() {     
+		    //var params = "{ from : \"" + getUrlParameter('from') + "\", to : \"" + getUrlParameter('to') + "\"}";
+
+			$.ajax({
+				url: 'CheckPointYield.aspx/GetRawYieldData',
+				type: 'POST',
+				cache: false,
+				dataType: 'json',
+				//data: params,
+				contentType: 'application/json; charset=utf-8',
+				success: function (response) {
+					//response
+					//console.log(response.d);
+					test = [];
+					for (var i = 0; i < 10; i++) {
+						test.push({sn : String(i) , date : String(new Date()), pass : String(0)});
+					}
+
+					for (var rt in test) {
+						console.log(test[rt])
+					}
+
+					for (var res in response.d) {
+						console.log(response.d[res]);
+					}
+				}});
+		}
+
+
+
+		var N = 0;
+
+		function modulName(name, firstPass, total, val)
+		{
+			this.id = N++;
+			this.name = name;
+			this.firstPass = Number(firstPass);
+			this.total = Number(total);
+			this.val = Number(val);
+		}
+
+		function renderData(result) {
+			var container = $('#container');
+			container.empty();
+			
+			var res = {};
+
+			for (var key in result) {
+				var name      = result[key][0].val,
+					firstPass = Number(result[key][1].val),
+					total     = Number(result[key][2].val);
+					
+				if (res[name]) {
+					res[name].firstPass += firstPass;
+					res[name].total += total;
+					res[name].val = getRation(res[name].firstPass, res[name].total);			
+				} else {
+					res[name] = new modulName(name, firstPass, total, getRation(firstPass, total));
+				}
+			}
+
+			for (var key in res) {
+				var progressbarTag = '#progressbar' +  res[key].id,
+					productLabel = '<span class="product-label">' + res[key].name + '</span>',
+					infoLabel = '<span class="info-label">(' + res[key].firstPass + '/' + res[key].total + ')</span>',
+					progresslabel = '<div class="progress-label" >Loading...</div>';
+					progressbar = '<div id="progressbar' +  res[key].id + '">' + progresslabel + '</div>',
+					progressbarContainer = '<div class="progressbar-container">' + productLabel + infoLabel + progressbar +  '</div>';
+
+				container.append(progressbarContainer);
+
+				var progressbarSelection = $(progressbarTag),
+					progresslabelSelection = $(progressbarTag + ' > .progress-label');
+
+				progressbarSelection.progressbar({ value: Number(res[key].val) });
+				var text = progressbarSelection.progressbar('value') + ' %';
+				progresslabelSelection.text(text);
+				progressbarValue = progressbarSelection.find('.ui-progressbar-value');
+				// Sets green-red-scale color depending on the value. (If not used the default and static css is used.)
+				// progressbarValue.css(getColor(res[key].val)});
+			}
+
+			container.append('<h5 id="update-label" class="offset">Last update at ' + (new Date()).toLocaleString() + '</h5>');
+		}
+
+		function getRation(a, b) {
+			return Number(100 * a / b).toPrecision(3)
+		}
+		
+		function getColor(value) {
+			var hue = ((value - 20) * 1.20).toString(10);
+			return ['hsl(', hue, ', 100%, 50%)'].join('');
+		}
+
+		// Update every 15 min.
+		//setInterval(function(){ dataCall(); }, 900000);
+
+		//dataCall();
+		rawDataCall();
+	</script>
+
+</head>
+<body>
+	<h3 class="offset">
+		FIRST PASS YIELD (Data since the last seven days)</h3>
+	<div id="container">
+	</div>
+</body>
+</html>

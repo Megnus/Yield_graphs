@@ -24,17 +24,7 @@
 
 		var d3 = [];
 		for (var i = 0; i <= 10; i += 1) {
-			d3.push([i, parseInt(Math.random() * 30)]);
-		}
-
-		var d4 = [];
-		for (var i = 0; i <= 10; i += 1) {
-			d2.push([i, parseInt(Math.random() * 30)]);
-		}
-
-		var d5 = [];
-		for (var i = 0; i <= 10; i += 1) {
-			d5.push([i, parseInt(Math.random() * 30)]);
+			d3.push([i + 1, parseInt(Math.random() * 30)]);
 		}
 
 		var stack = 0,
@@ -43,100 +33,41 @@
 			steps = false;
 
 		function plotWithOptions() {
-		$.plot("#placeholder", [/*{
-				data: d1,
-				lines: { show: true, fill: false },
-				color: "#000"
-			}, */{
-				data: d2,
-				stack: true,
-				bars: { show: true },
-				color: "#8cef6d"
-			}, {
-				data: d3,
-				stack: true,
-				bars: { show: true },
-				color: "#cd0a0a", yaxis: 1
-			},
-							//	{ data: d4, label: "Oil price ($)", yaxes: 2/*, yaxes: {position: "right"} */},
-			{ data: d1, /*bars: { show: true },*/ label: "USD/EUR exchange rate", yaxis: 2 }],
-			{
-				yaxes: [ { alignTicksWithAxis: true, position: "left" }, { alignTicksWithAxis: true, position: "right" } ],
-				legend: { position: "sw" } 
-			}
-
-			);
-		
-
-		/*	$.plot("#placeholder", [
-				{ data: d4, label: "Oil price ($)" },
-				{ data: d5, label: "USDs/EUR exchange rate", yaxis: 2 }
-			], {
-				//xaxes: [ { mode: "time" } ],
-				yaxes: [ { min: 0 }, {
-					// align if we are to the right
-					alignTicksWithAxis: true,
-					position: "right"
-					//,
-					//tickFormatter: euroFormatter
-				} ],
-				legend: { position: "sw" }
-			});*/
+			$.plot("#placeholder", [
+					{
+						data: d1,
+						label: "Failed",
+						stack: true,
+						bars: { show: true },
+						color: "#8cef6d"
+					}, {
+						data: d2,
+						label: "Passed",
+						stack: true,
+						bars: { show: true },
+						color: "#cd0a0a", yaxis: 1
+					}, { 
+						data: d3,
+						label: "Yield in %", 
+						yaxis: 2 }],
+				{
+					yaxes: [ 
+						{ alignTicksWithAxis: true, position: "left" }, 
+						{ alignTicksWithAxis: true, position: "right" }],
+					legend: { position: "sw" } 
+				});
 		}
 
 		plotWithOptions();
-
-		$(".stackControls button").click(function (e) {
-			e.preventDefault();
-			stack = $(this).text() == "With stacking" ? true : null;
-			plotWithOptions();
-		});
-
-		$(".graphControls button").click(function (e) {
-			e.preventDefault();
-			bars = $(this).text().indexOf("Bars") != -1;
-			lines = $(this).text().indexOf("Lines") != -1;
-			steps = $(this).text().indexOf("steps") != -1;
-			plotWithOptions();
-		});
-
-		// Add the Flot version string to the footer
-
-		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
 	});
 
 	</script>
 </head>
 <body>
-
-	<div id="header">
-		<h2>Stacking</h2>
-	</div>
-
 	<div id="content">
-
 		<div class="demo-container">
 			<div id="placeholder" class="demo-placeholder"></div>
 		</div>
-
-		<p>With the stack plugin, you can have Flot stack the series. This is useful if you wish to display both a total and the constituents it is made of. The only requirement is that you provide the input sorted on x.</p>
-
-		<p class="stackControls">
-			<button>With stacking</button>
-			<button>Without stacking</button>
-		</p>
-
-		<p class="graphControls">
-			<button>Bars</button>
-			<button>Lines</button>
-			<button>Lines with steps</button>
-		</p>
-
 	</div>
-
-	<div id="footer">
-		Copyright &copy; 2007 - 2014 IOLA and Ole Laursen
-	</div>
-
 </body>
 </html>
