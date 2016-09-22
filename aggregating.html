@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Yield Progressbars</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+	<style></style>
+
+	<script type="text/javascript">
+
+		function aggregateData(response) {
+			data = {};
+			for (var index in response.d) {
+				if (data[response.d[index]['sn']] == null) { //=== undefined?
+					data[response.d[index]['sn']] = [];
+				}
+
+				data[response.d[index]['sn']].push([
+					response.d[index]['date'].substring(0, 7), 
+					response.d[index]['pass']]);
+			}
+
+			for (var index in data) {
+				console.log(index + ' : ' + data[index].length);
+			}
+		}
+
+		function generateFakeData() {
+			var response = { d : [] };
+			var sn = [];
+			var date = new Date(2015, 0, 1, 16, 10, 10);
+
+			for (var i = 0; i < 10; i++) {
+				sn.push(Math.round(Math.random() * 500 + 400));
+			}
+
+			for (var i = 0; i < 19608; i++) {
+				date = new Date(new Date(date).setMinutes(date.getMinutes() + Math.random() * 60));
+				response.d.push({
+					sn : String(sn[Math.round(Math.random() * 9)]), 
+					date : date.toLocaleDateString() + ' ' + date.toLocaleTimeString(), 
+					pass : String(Math.round(Math.random()))});
+			}
+
+			return response;
+		}
+
+		aggregateData(generateFakeData());
+	</script>
+
+</head>
+<body>
+	<h3 class="offset">
+		Data is printed in the console</h3>
+	<div id="container">
+	</div>
+</body>
+</html>

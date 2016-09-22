@@ -156,7 +156,43 @@
 				}});
 		}
 
+		function aggregateData(response) {
+			data = {};
+			for (var index in response.d) {
+				if (data[response.d[index]['sn']] == null) { //=== undefined?
+					data[response.d[index]['sn']] = [];
+				}
 
+				data[response.d[index]['sn']].push([
+					response.d[index]['date'].substring(0, 7), 
+					response.d[index]['pass']]);
+			}
+
+			for (var index in data) {
+				console.log(data[index]);
+			}
+		}
+
+
+		function generateFakeData() {
+			var response = { d : [] };
+			var sn = [];
+			var date = new Date(2015, 0, 1, 16, 10, 10);
+
+			for (var i = 0; i < 10; i++) {
+				sn.push(Math.round(Math.random() * 500 + 400));
+			}
+
+			for (var i = 0; i < 19608; i++) {
+				date = new Date(new Date(date).setMinutes(date.getMinutes() + Math.random() * 60));
+				response.d.push({
+					sn : String(sn[Math.round(Math.random() * 9)]), 
+					date : date.toLocaleDateString() + ' ' + date.toLocaleTimeString(), 
+					pass : String(Math.round(Math.random()))});
+			}
+
+			return response;
+		}
 
 		var N = 0;
 
@@ -226,7 +262,7 @@
 		//setInterval(function(){ dataCall(); }, 900000);
 
 		//dataCall();
-		rawDataCall();
+		aggregateData(generateFakeData());
 	</script>
 
 </head>
