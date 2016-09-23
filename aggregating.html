@@ -24,8 +24,37 @@
 					response.d[index]['pass']]);
 			}
 
+			var uniqueIdentities = [];
 			for (var index in data) {
+				uniqueIdentities.push(index);
 				console.log(index + ' : ' + data[index].length);
+			}
+
+			var firstDateStr = data[uniqueIdentities[0]][0][0];
+			var lastDateStr = data[uniqueIdentities[0]][data[uniqueIdentities[0]].length - 1][0];
+			var firstDate = new Date(firstDateStr + '-01');
+			var lastDate = new Date(lastDateStr + '-01');
+			var dateArray = {};
+
+			for (var date = firstDate; date <= lastDate; date = new Date(date.setMonth(date.getMonth() + 1))) {
+				console.log(date.toLocaleDateString().substring(0, 7));
+				var dateMonth = date.toLocaleDateString().substring(0, 7);
+				console.log(date.toLocaleDateString() + ' ' + date.toLocaleTimeString());
+				dateArray[dateMonth] = { date : dateMonth, pass : 0, total : 0, yield : 0.0 }
+			}
+
+			var array = data[uniqueIdentities[0]];
+			for (var index in array) {
+				var value = array[index];
+				var dateMonth = value[0];
+				dateArray[dateMonth].total++;
+				dateArray[dateMonth].pass += Number(value[1]);
+				dateArray[dateMonth].yield = dateArray[dateMonth].pass / dateArray[dateMonth].total;
+				
+			}
+
+			for (var index in dateArray) {
+				console.log(dateArray[index])
 			}
 		}
 
