@@ -2,14 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Yield Progressbars</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Stacking</title>
+	<link href="examples.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
-
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
-
-	<style></style>
-
+	<script language="javascript" type="text/javascript" src="jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="jquery.flot.categories.js"></script>
+	<script language="javascript" type="text/javascript" src="jquery.flot.stack.js"></script>
 	<script type="text/javascript">
 
 		function createArrays(data) {
@@ -86,20 +88,56 @@
 			return response;
 		}
 
-		var x = aggregateData(generateFakeData());
-		
-		for (var k in x) {
-			var res = createArrays(x[k]);
-			console.log(res);			
-		}
+		$(function() {	
+			var x = aggregateData(generateFakeData());
+			var array = [];
+			for (var k in x) {
+				var res = createArrays(x[k]);
+				array.push(res);		
+			}
+			var d1 = [], d2 = [], d3 = [];
+			for (var i in array[0].dateIdArray) {
+				d1.push([array[0].dateIdArray[i], array[0].passArray[i]]);
+				d2.push([array[0].dateIdArray[i], array[0].failedArray[i]]);
+				d3.push([array[0].dateIdArray[i], array[0].yieldArray[i] * 100]);
+			}
+
+			function plotWithOptions() {
+				$.plot("#placeholder", [{
+							data: d1,
+							label: "Passed",
+							stack: true,
+							bars: { show: true, 'align': "center", lineWidth: 1 },
+							color: "#8cef6d" }, {
+							data: d2,
+							label: "Failed",
+							stack: true,
+							bars: { show: true, 'align': "center", lineWidth: 1 },
+							color: "#cd0a0a" }, { 
+							data: d3,
+							label: "Yield in %", 
+							yaxis: 2,
+							lines: { show: true, 'align': "left" }}], {
+						yaxes: [ 
+							{ alignTicksWithAxis: true, position: "left" }, 
+							{ alignTicksWithAxis: true, position: "right", min:0, max: 100 }],
+						xaxis: {
+							mode: "categories",
+							tickLength: 0 },
+						grid: {
+							borderWidth: {top: 1, right: 1, bottom: 1, left: 1},
+							borderColor: {top: "#ccc", left: "#ccc"}}
+						});}
+			plotWithOptions();
+		});
 
 	</script>
-
 </head>
 <body>
-	<h3 class="offset">
-		Data is printed in the console</h3>
-	<div id="container">
+	<div id="content">
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
 	</div>
 </body>
 </html>
